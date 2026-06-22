@@ -1,0 +1,8 @@
+{
+  "name": "SIPP SDN 1 Banyuurip",
+  "short_name": "SIPP",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0d6efd"
+}
