@@ -276,6 +276,10 @@ document.getElementById("hasilPengaduan").innerHTML="❌ Gagal koneksi ke server
 }
 
 </script>
-
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sipp-banyuurip/service-worker.js");
+}
+</script>
 </body>
 </html>
