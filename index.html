@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8"> 
+<meta charset="UTF-8">
+
 <link rel="manifest" href="manifest.json">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1">
-
-<meta name="theme-color"
-content="#0d6efd">
-
-<meta name="apple-mobile-web-app-capable"
-content="yes">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0d6efd">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
 <title>SIPP SDN 1 Banyuurip</title>
 
 <style>
@@ -49,7 +48,7 @@ button {
 }
 
 .menu a{
-  display:block;
+  display: block;
   margin:12px 0;
   padding:14px 16px;
   border-radius:12px;
@@ -82,7 +81,7 @@ button {
   <h2>🏫 SIPP SD NEGERI 1 BANYUURIP</h2>
 
   <div style="text-align:center;margin:10px 0;">
-    <img src="logo.png" width="90">
+    <img src="icon-192.png" width="90">
   </div>
 
   <p id="welcome"></p>
@@ -148,12 +147,6 @@ button {
 
 <script>
 
-const URL_LAYANAN =
-"https://script.google.com/macros/s/AKfycby2lv-dJ4ngAhAb2JQC9-c-HZpkFGlt_YI51X0hR4x6SfaPUiHFkWQO-HayeyVlLpsV/exec?page=cek";
-
-const URL_PENGADUAN =
-"https://script.google.com/macros/s/AKfycbyxb1ZZrOaNkvDDwOJTcbPuXsA3gujfegbrkVyra095_n_S8ARZvzVnCbiy53F-ozkbUA/exec";
-
 // LOGIN
 function login(){
   let nama=document.getElementById("nama").value;
@@ -216,8 +209,7 @@ alert("Isi tiket");
 return;
 }
 
-document.getElementById("hasilLayanan").innerHTML =
-"⏳ Mengecek status...";
+document.getElementById("hasilLayanan").innerHTML="⏳ Mengecek status...";
 
 let url =
 "https://script.google.com/macros/s/AKfycbyd3Ti1uVFcUNCTNNrA2A_rPOJ_KYgXnjb_QabcferoWhEOHkpNT4jUaMprxNeis3sg/exec"
@@ -228,33 +220,19 @@ fetch(url)
 .then(data=>{
 
 let status = data.status;
-
-// WARNA STATUS
 let hasil = "";
 
-if(status=="MASUK"){
-hasil = "🟡 MASUK";
-}
-else if(status=="DIPROSES"){
-hasil = "🔵 DIPROSES";
-}
-else if(status=="SELESAI"){
-hasil = "🟢 SELESAI";
-}
-else if(status=="DITOLAK"){
-hasil = "🔴 DITOLAK";
-}
-else{
-hasil = "❌ " + status;
-}
+if(status=="MASUK") hasil="🟡 MASUK";
+else if(status=="DIPROSES") hasil="🔵 DIPROSES";
+else if(status=="SELESAI") hasil="🟢 SELESAI";
+else if(status=="DITOLAK") hasil="🔴 DITOLAK";
+else hasil="❌ "+status;
 
-document.getElementById("hasilLayanan").innerHTML =
-"📌 Status: " + hasil;
+document.getElementById("hasilLayanan").innerHTML="📌 Status: "+hasil;
 
 })
 .catch(()=>{
-document.getElementById("hasilLayanan").innerHTML =
-"❌ Gagal koneksi";
+document.getElementById("hasilLayanan").innerHTML="❌ Gagal koneksi";
 });
 
 }
@@ -262,52 +240,39 @@ document.getElementById("hasilLayanan").innerHTML =
 // CEK PENGADUAN
 function cekPengaduan(){
 
-  let tiket = document.getElementById("namaPengaduan").value;
+let tiket = document.getElementById("namaPengaduan").value;
 
-  if(tiket == ""){
-    alert("Isi tiket");
-    return;
-  }
+if(tiket==""){
+alert("Isi tiket");
+return;
+}
 
-  document.getElementById("hasilPengaduan").innerHTML =
-    "⏳ Mengecek status...";
+document.getElementById("hasilPengaduan").innerHTML="⏳ Mengecek status...";
 
-  let url = "https://script.google.com/macros/s/AKfycbxsEhWNZD6v9aT_gJrg7aBm_nu6HAKbxmSTXdScLL7jeLnI9LdzN0WO5yH0l9jnO2VTKA/exec"
-    + "?action=cekPengaduan&tiket=" + encodeURIComponent(tiket);
+let url =
+"https://script.google.com/macros/s/AKfycbxsEhWNZD6v9aT_gJrg7aBm_nu6HAKbxmSTXdScLL7jeLnI9LdzN0WO5yH0l9jnO2VTKA/exec"
++ "?action=cekPengaduan&tiket=" + encodeURIComponent(tiket);
 
-  fetch(url)
-    .then(res => res.json())
-    .then(data => {
+fetch(url)
+.then(res=>res.json())
+.then(data=>{
 
-      let status = String(data.status).toUpperCase();
+let status = String(data.status).toUpperCase();
+let hasil = "";
 
-      let hasil = "";
+if(status=="MASUK") hasil="🟡 MASUK";
+else if(status=="DIPROSES") hasil="🔵 DIPROSES";
+else if(status=="SELESAI") hasil="🟢 SELESAI";
+else if(status=="DITOLAK") hasil="🔴 DITOLAK";
+else hasil="❌ "+data.status;
 
-      if(status == "MASUK"){
-        hasil = "🟡 MASUK";
-      }
-      else if(status == "DIPROSES"){
-        hasil = "🔵 DIPROSES";
-      }
-      else if(status == "SELESAI"){
-        hasil = "🟢 SELESAI";
-      }
-      else if(status == "DITOLAK"){
-        hasil = "🔴 DITOLAK";
-      }
-      else{
-        hasil = "❌ " + data.status;
-      }
+document.getElementById("hasilPengaduan").innerHTML="📌 Status: "+hasil;
 
-      document.getElementById("hasilPengaduan").innerHTML =
-        "📌 Status: " + hasil;
+})
+.catch(()=>{
+document.getElementById("hasilPengaduan").innerHTML="❌ Gagal koneksi ke server";
+});
 
-    })
-    .catch(err => {
-      console.log(err);
-      document.getElementById("hasilPengaduan").innerHTML =
-        "❌ Gagal koneksi ke server";
-    });
 }
 
 </script>
