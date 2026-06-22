@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIPP SDN 1 Banyuurip</title>
+
+<style>
+body{
+  font-family: Arial;
+  background:#f4f6f9;
+}
+
+.card {
+  background: white;
+  padding: 30px 20px;
+  border-radius: 16px;
+  max-width: 420px;
+  margin: 30px auto;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+input {
+  width: 90%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+}
+
+button {
+  padding: 10px 20px;
+  background: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.menu a{
+  display:block;
+  margin:12px 0;
+  padding:14px 16px;
+  border-radius:12px;
+  text-decoration:none;
+  font-size:17px;
+  font-weight:600;
+  color:white;
+}
+
+.layanan{background:#4caf50;}
+.info{background:#ff9800;}
+.status{background:#2196f3;}
+.survey{background:#9c27b0;}
+.pengaduan{background:#e53935;}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="card" id="loginBox">
+  <h2>🏫 LOGIN SIPP</h2>
+  <input id="nama" placeholder="Masukkan Nama">
+  <button onclick="login()">Masuk</button>
+</div>
+
+<!-- MENU -->
+<div class="card menu" id="menuBox" style="display:none;">
+
+  <h2>🏫 SIPP SD NEGERI 1 BANYUURIP</h2>
+
+  <div style="text-align:center;margin:10px 0;">
+    <img src="logo.png" width="90">
+  </div>
+
+  <p id="welcome"></p>
+
+  <a class="layanan" target="_blank"
+  href="https://docs.google.com/forms/d/e/1FAIpQLSfveG1fLTCebhOgONgVrYLC_qJ-kzx4gg8agmD-AkWScLa6Qg/viewform">
+  📨 AJUKAN LAYANAN
+  </a>
+
+  <a class="info" target="_blank"
+  href="https://sites.google.com/guru.sd.belajar.id/sipp-sd-negeri-1-banyuurip">
+  📰 INFORMASI LAYANAN
+  </a>
+
+  <a class="status" href="#" onclick="openStatus()">
+  📊 CEK STATUS
+  </a>
+
+  <a class="survey" target="_blank"
+  href="https://skm.go.id/share/instansi/b6dcdd66-87c1-43cb-8910-6d40e79aa361/2">
+  📝 SURVEY KEPUASAN
+  </a>
+
+  <a class="pengaduan" target="_blank"
+  href="https://docs.google.com/forms/d/e/1FAIpQLSekr3jsaQm-dq_UvepML2C8aYvEMW8_8ZL48f8uNEziH3bp_w/viewform">
+  🚨 PENGADUAN
+  </a>
+
+  <br>
+  <button onclick="logout()">Logout</button>
+</div>
+
+<!-- STATUS MENU -->
+<div class="card" id="statusBox" style="display:none;">
+  <h2>📊 CEK STATUS</h2>
+
+  <button onclick="openLayananStatus()">📌 Pengajuan Layanan</button>
+  <br><br>
+  <button onclick="openPengaduanStatus()">🚨 Pengaduan</button>
+  <br><br>
+  <button onclick="backMenu()">⬅ Kembali</button>
+</div>
+
+<!-- LAYANAN -->
+<div class="card" id="layananStatusBox" style="display:none;">
+  <h3>📌 Status Layanan</h3>
+  <input id="namaLayanan" placeholder="Masukkan Tiket">
+  <button onclick="cekLayanan()">Cek</button>
+  <div id="hasilLayanan"></div>
+  <br>
+  <button onclick="backStatusMenu()">⬅ Kembali</button>
+</div>
+
+<!-- PENGADUAN -->
+<div class="card" id="pengaduanStatusBox" style="display:none;">
+  <h3>🚨 Status Pengaduan</h3>
+  <input id="namaPengaduan" placeholder="Masukkan Tiket">
+  <button onclick="cekPengaduan()">Cek</button>
+  <div id="hasilPengaduan"></div>
+  <br>
+  <button onclick="backStatusMenu()">⬅ Kembali</button>
+</div>
+
+<script>
+
+const URL_LAYANAN =
+"https://script.google.com/macros/s/AKfycby2lv-dJ4ngAhAb2JQC9-c-HZpkFGlt_YI51X0hR4x6SfaPUiHFkWQO-HayeyVlLpsV/exec?page=cek";
+
+const URL_PENGADUAN =
+"https://script.google.com/macros/s/AKfycbyxb1ZZrOaNkvDDwOJTcbPuXsA3gujfegbrkVyra095_n_S8ARZvzVnCbiy53F-ozkbUA/exec";
+
+// LOGIN
+function login(){
+  let nama=document.getElementById("nama").value;
+  if(nama==""){alert("Isi nama");return;}
+
+  localStorage.setItem("nama",nama);
+  document.getElementById("loginBox").style.display="none";
+  document.getElementById("menuBox").style.display="block";
+  document.getElementById("welcome").innerHTML="👋 Selamat datang, "+nama;
+}
+
+function logout(){
+  localStorage.removeItem("nama");
+  location.reload();
+}
+
+window.onload=function(){
+  let nama=localStorage.getItem("nama");
+  if(nama){
+    document.getElementById("loginBox").style.display="none";
+    document.getElementById("menuBox").style.display="block";
+    document.getElementById("welcome").innerHTML="👋 Selamat datang, "+nama;
+  }
+}
+
+// NAVIGASI
+function openStatus(){
+  document.getElementById("menuBox").style.display="none";
+  document.getElementById("statusBox").style.display="block";
+}
+
+function backMenu(){
+  document.getElementById("statusBox").style.display="none";
+  document.getElementById("menuBox").style.display="block";
+}
+
+function openLayananStatus(){
+  document.getElementById("statusBox").style.display="none";
+  document.getElementById("layananStatusBox").style.display="block";
+}
+
+function openPengaduanStatus(){
+  document.getElementById("statusBox").style.display="none";
+  document.getElementById("pengaduanStatusBox").style.display="block";
+}
+
+function backStatusMenu(){
+  document.getElementById("layananStatusBox").style.display="none";
+  document.getElementById("pengaduanStatusBox").style.display="none";
+  document.getElementById("statusBox").style.display="block";
+}
+
+// CEK LAYANAN
+function cekLayanan(){
+
+let tiket = document.getElementById("namaLayanan").value;
+
+if(tiket==""){
+alert("Isi tiket");
+return;
+}
+
+document.getElementById("hasilLayanan").innerHTML =
+"⏳ Mengecek status...";
+
+let url =
+"https://script.google.com/macros/s/AKfycbyd3Ti1uVFcUNCTNNrA2A_rPOJ_KYgXnjb_QabcferoWhEOHkpNT4jUaMprxNeis3sg/exec"
++ "?action=cekLayanan&tiket=" + tiket;
+
+fetch(url)
+.then(res=>res.json())
+.then(data=>{
+
+let status = data.status;
+
+// WARNA STATUS
+let hasil = "";
+
+if(status=="MASUK"){
+hasil = "🟡 MASUK";
+}
+else if(status=="DIPROSES"){
+hasil = "🔵 DIPROSES";
+}
+else if(status=="SELESAI"){
+hasil = "🟢 SELESAI";
+}
+else if(status=="DITOLAK"){
+hasil = "🔴 DITOLAK";
+}
+else{
+hasil = "❌ " + status;
+}
+
+document.getElementById("hasilLayanan").innerHTML =
+"📌 Status: " + hasil;
+
+})
+.catch(()=>{
+document.getElementById("hasilLayanan").innerHTML =
+"❌ Gagal koneksi";
+});
+
+}
+
+// CEK PENGADUAN
+function cekPengaduan(){
+
+  let tiket = document.getElementById("namaPengaduan").value;
+
+  if(tiket == ""){
+    alert("Isi tiket");
+    return;
+  }
+
+  document.getElementById("hasilPengaduan").innerHTML =
+    "⏳ Mengecek status...";
+
+  let url = "https://script.google.com/macros/s/AKfycbxsEhWNZD6v9aT_gJrg7aBm_nu6HAKbxmSTXdScLL7jeLnI9LdzN0WO5yH0l9jnO2VTKA/exec"
+    + "?action=cekPengaduan&tiket=" + encodeURIComponent(tiket);
+
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+
+      let status = String(data.status).toUpperCase();
+
+      let hasil = "";
+
+      if(status == "MASUK"){
+        hasil = "🟡 MASUK";
+      }
+      else if(status == "DIPROSES"){
+        hasil = "🔵 DIPROSES";
+      }
+      else if(status == "SELESAI"){
+        hasil = "🟢 SELESAI";
+      }
+      else if(status == "DITOLAK"){
+        hasil = "🔴 DITOLAK";
+      }
+      else{
+        hasil = "❌ " + data.status;
+      }
+
+      document.getElementById("hasilPengaduan").innerHTML =
+        "📌 Status: " + hasil;
+
+    })
+    .catch(err => {
+      console.log(err);
+      document.getElementById("hasilPengaduan").innerHTML =
+        "❌ Gagal koneksi ke server";
+    });
+}
+
+</script>
+
+</body>
+</html>
